@@ -14,6 +14,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let intervalTime = 0
     let interval = 0
 
+    function startGame() {
+        currentSnake.forEach(index => squares[index].classList.remove('snake'))
+        squares[appleIndex].classList.remove('apple')
+        clearInterval(interval)
+        score = 0
+        direction = 1
+        scoreDisplay.innerText = score
+        intervalTime = 1000
+        currentSnake = [2,1,0]
+        currentIndex = 0
+        currentSnake.forEach(index => squares[index].classList.add('snake'))
+        interval = setInterval(moveOutcomes, intervalTime)
+    }
+   
+    function moveOutcomes() {
+        if (
+        (currentSnake[0] + width >= (width*width) && direction === width ) ||
+        (currentSnake[0] % width === width -1 && direction === 1) ||
+        (currentSnake[0] % width === 0 && direction === -1) ||
+        (currentSnake[0] - width < 0 && direction === -width) ||
+        squares[currentSnake[0] + direction].classList.contains('snake')
+        ) {
+            return clearInterval(interval)
+        }
+        const tail = currentSnake.pop()
+        squares[tail].classList.remove('snake')
+    }
+
+
+
     function control(e) {
         squares[currentIndex].classList.remove('snake')
 
@@ -26,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.keycode ===40) {
             direction = +width  // if we press the up down key the snake head will instantly appear in the div 10 divs from where you are now
         }
-
     }
+    document.addEventListener('Keyup', control)
    })
 
